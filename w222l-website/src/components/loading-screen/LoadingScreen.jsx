@@ -2,7 +2,7 @@ import gsap from 'gsap'
 import { useRef } from 'react'
 import CardContainer from './components/CardContainer'
 
-export default function LoadingScreen({ handleIntroTransition }) {
+export default function LoadingScreen({ handleLoadingScreenCleanup }) {
     const loadingScreenRef = useRef( null )
     const loadingScreenCardContainerRef = useRef( null )
     const loadingScreenTitleRef = useRef( null )
@@ -10,7 +10,7 @@ export default function LoadingScreen({ handleIntroTransition }) {
     const handleCardFlipCompletion = () => {
         const tl = gsap.timeline({
             onComplete: () => {
-                handleIntroTransition()
+                handleLoadingScreenCleanup()
             }
         })
 
@@ -24,8 +24,8 @@ export default function LoadingScreen({ handleIntroTransition }) {
             ease: "elastic.out(1, 0.5)"
         }).to( loadingScreenRef.current, {
             opacity: 0,
-            duration: 0.5,
-            ease: "elastic.out(1, 0.3)"
+            duration: 0.75,
+            ease: "elastic.out(1, 0.75)"
         })
     }
 
