@@ -17,7 +17,7 @@ export default function Experience({
 
     useFrame( ( state, delta ) => {
         const camera = state.camera
-   
+
         camera.position.lerp( currentCameraPosition, 0.1 )
         camera.lookAt( 0, 0.4, 0 )
     } )

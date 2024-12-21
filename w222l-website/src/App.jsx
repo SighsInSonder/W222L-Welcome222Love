@@ -54,7 +54,7 @@ export default function App() {
     const handleLoadingScreenCleanup = () => {
         setIsWebsiteLoading( false )
 
-        handleIntro()
+        // handleIntro()
     }
 
     useEffect( () => {
