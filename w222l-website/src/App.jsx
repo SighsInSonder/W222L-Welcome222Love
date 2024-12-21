@@ -27,6 +27,10 @@ export default function App() {
     const handleScreenClick = () => {
         if ( userActionNeeded === 'click' ) {
             setUserActionNeeded( null )
+
+            if ( websiteState === 'intro-draw-card' ) {
+                setShowContentCard( false )
+            }
         }
     }
 
@@ -35,6 +39,7 @@ export default function App() {
 
         setTimeout(() => {
             setShowContentCard( true )
+            setUserActionNeeded( 'click' )
         }, 750)
     }
 
@@ -48,7 +53,6 @@ export default function App() {
 
     const handleLoadingScreenCleanup = () => {
         setIsWebsiteLoading( false )
-        console.log( '[+] LOADING SCREEN:: complete n unmounted' )
 
         handleIntro()
     }
@@ -58,10 +62,13 @@ export default function App() {
             switch ( websiteState ) {
                 case 'intro-draw-card':
                     handleIntroContentCard()
-                    break;
+                    break
+                case 'navigation-menu':
+                    console.log( 'navigation starting' )
+                    break
             
                 default:
-                    break;
+                    break
             }
         }
     }, [ websiteState ] )
@@ -71,6 +78,8 @@ export default function App() {
         { isWebsiteLoading && <LoadingScreen handleLoadingScreenCleanup={ handleLoadingScreenCleanup } /> }
 
         <ContentCard 
+            websiteState={ websiteState }
+            setWebsiteState={ setWebsiteState }
             showContentCard={ showContentCard }
         />
         
