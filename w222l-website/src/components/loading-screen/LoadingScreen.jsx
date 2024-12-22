@@ -1,8 +1,10 @@
 import gsap from 'gsap'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import CardContainer from './components/CardContainer'
 
 export default function LoadingScreen({ handleLoadingScreenCleanup }) {
+    const [ title, setTitle ] = useState( '' )
+
     const loadingScreenRef = useRef( null )
     const loadingScreenCardContainerRef = useRef( null )
     const loadingScreenTitleRef = useRef( null )
@@ -29,6 +31,10 @@ export default function LoadingScreen({ handleLoadingScreenCleanup }) {
         })
     }
 
+    useEffect( () => {
+        setTitle( 'welcome 222 love' )
+    }, [] )
+
     return <div ref={ loadingScreenRef } className='relative w-full h-full bg-slate-100 opacity-100 z-50'>
 
         <div 
@@ -42,7 +48,7 @@ export default function LoadingScreen({ handleLoadingScreenCleanup }) {
             ref={ loadingScreenTitleRef } 
             className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 scale-0 font-lily font-bold text-4xl  text-pinkPalette-2 cursor-default'
         >
-            w222l
+            { title }
         </div>
 
     </div>

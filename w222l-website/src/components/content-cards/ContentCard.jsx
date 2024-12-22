@@ -45,32 +45,38 @@ export default function ContentCard({
 
     useEffect( () => {
         if ( showContentCard ) {
-            gsap.fromTo( contentCardContainerRef.current, {
-                y: '100%', 
-                scale: 0,
-                opacity: 0,
-            },
-            {
-                y: 0,
-                scale: 1,
-                opacity: 1,
-                duration: 1.2, 
-                ease: "elastic.out(1, 0.75)"
-            })
+            const showAnimation = () => {
+                gsap.fromTo( contentCardContainerRef.current, {
+                    y: '100%', 
+                    scale: 0,
+                    opacity: 0,
+                },
+                {
+                    y: 0,
+                    scale: 1,
+                    opacity: 1,
+                    duration: 1.2, 
+                    ease: "elastic.out(1, 0.75)"
+                })
+            }
+            requestAnimationFrame( showAnimation )
         } else {
-            const tl = gsap.timeline({
-                onComplete: () => {
-                    handleHidingContentCard()
-                }
-            })
-
-            tl.to( contentCardContainerRef.current, {
-                y: '100%',
-                scale: 0,
-                opacity: 0,
-                duration: 1,
-                ease: "elastic.out(1, 0.75)"
-            })
+            const hideAnimation = () => {
+                const tl = gsap.timeline({
+                    onComplete: () => {
+                        handleHidingContentCard()
+                    }
+                })
+    
+                tl.to( contentCardContainerRef.current, {
+                    y: '100%',
+                    scale: 0,
+                    opacity: 0,
+                    duration: 1,
+                    ease: "elastic.out(1, 0.75)"
+                })
+            }
+            requestAnimationFrame( hideAnimation )
         }
     }, [ showContentCard ] )
 

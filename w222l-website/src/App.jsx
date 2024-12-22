@@ -4,6 +4,7 @@ import * as THREE from 'three'
 import ContentCard from './components/content-cards/ContentCard.jsx'
 import Experience from './components/three/Experience.jsx'
 import LoadingScreen from './components/loading-screen/LoadingScreen.jsx'
+import Navigation from './components/navigation/Navigation.jsx'
 
 export default function App() {
     const [ isWebsiteLoading, setIsWebsiteLoading ] = useState( true )
@@ -11,7 +12,12 @@ export default function App() {
 
     const [ userActionNeeded, setUserActionNeeded ] = useState( null )
 
-    const [ currentCameraPosition, setCurrentCameraPosition ] = useState( new THREE.Vector3( 0, 0.6, 10 ) )
+    const [ cameraState, setCameraState ] = useState({
+        position: new THREE.Vector3( 0, 0.6, 10 ),
+        fieldOfView: 75,
+        lookAt: new THREE.Vector3( 0, 0.4, 0 ),
+        interpolationSpeed: 0.1
+    })
 
     const [ avatarAnimationState, setAvatarAnimationState ] = useState( null )
     const [ avatarDialogueState, setAvatarDialogueState ] = useState( '' )
@@ -19,10 +25,8 @@ export default function App() {
     const [ tarotCardState, setTarotCardState ] = useState( null )
     const [ tarotCardAnimationState, setTarotCardAnimationState ] = useState( null )
 
+    const [ showNavigationMenu, setShowNavigationMenu ] = useState( false )
     const [ showContentCard, setShowContentCard ] = useState( false )
-    const [ contentCardState, setContentCardState ] = useState({
-
-    })
 
     const handleScreenClick = () => {
         if ( userActionNeeded === 'click' ) {
@@ -32,6 +36,26 @@ export default function App() {
                 setShowContentCard( false )
             }
         }
+    }
+
+    const handleNavigationToContentCard = () => {
+        setShowNavigationMenu( false )
+
+        setTimeout(() => {
+            setCameraState( ( prev ) => ({
+                ...prev,
+                lookAt: new THREE.Vector3( 0, 2, 0 ),
+                interpolationSpeed: 0.01
+            }))
+        
+            setTimeout( () => {
+                setShowContentCard( true )
+            }, 1000 )
+        }, 500);
+    }
+
+    const handleNavigationMenu = () => {
+        setShowNavigationMenu( true )
     }
 
     const handleIntroContentCard = () => {
@@ -44,7 +68,10 @@ export default function App() {
     }
 
     const handleIntro = () => {
-        setCurrentCameraPosition( new THREE.Vector3( 0, 0.6, 1.2 ) )
+        setCameraState( ( prev ) => ({
+            ...prev,
+            position: new THREE.Vector3( 0, 0.6, 1.2 )
+        }))
 
         setTimeout(() => {
             setAvatarDialogueState( 'intro' )
@@ -54,7 +81,7 @@ export default function App() {
     const handleLoadingScreenCleanup = () => {
         setIsWebsiteLoading( false )
 
-        // handleIntro()
+        handleIntro()
     }
 
     useEffect( () => {
@@ -64,7 +91,14 @@ export default function App() {
                     handleIntroContentCard()
                     break
                 case 'navigation-menu':
-                    console.log( 'navigation starting' )
+                    setCameraState( ( prev ) => ({
+                        ...prev,
+                        position: new THREE.Vector3( 0, 0.7, 1.2 ),
+                        fieldOfView: 30,
+                        lookAt: new THREE.Vector3( 0, 1, 0 )
+                    }))
+
+                    setTimeout( handleNavigationMenu, 1000 )
                     break
             
                 default:
@@ -77,6 +111,8 @@ export default function App() {
 
         { isWebsiteLoading && <LoadingScreen handleLoadingScreenCleanup={ handleLoadingScreenCleanup } /> }
 
+        { websiteState === 'navigation-menu' && <Navigation showNavigationMenu={ showNavigationMenu } toggleToContentCard={ handleNavigationToContentCard } /> }
+
         <ContentCard 
             websiteState={ websiteState }
             setWebsiteState={ setWebsiteState }
@@ -86,7 +122,8 @@ export default function App() {
         <div className='fixed top-0 left-0 w-full h-full z-30'>
             <Canvas
                 camera={{
-                    position: currentCameraPosition,
+                    position: cameraState.position,
+                    fov: cameraState.fieldOfView,
                     near: 0.1,
                     far: 5
                 }}
@@ -95,7 +132,7 @@ export default function App() {
                 <Experience 
                     websiteState={ websiteState }
                     setWebsiteState={ setWebsiteState }
-                    currentCameraPosition={ currentCameraPosition }
+                    cameraState={ cameraState }
                     avatarAnimationState={ avatarAnimationState } 
                     avatarDialogueState={ avatarDialogueState }
                     tarotCardState={ tarotCardState }

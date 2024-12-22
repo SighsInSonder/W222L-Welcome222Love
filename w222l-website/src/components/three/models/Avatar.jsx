@@ -4,7 +4,7 @@ import { useGraph } from '@react-three/fiber'
 import { Html, useGLTF, useAnimations } from '@react-three/drei'
 import * as THREE from 'three'
 import { SkeletonUtils } from 'three-stdlib'
-import dialogueScript from '../../../data/dialogueScript'
+import dialogueScript from '../../../assets/data/dialogueScript'
 
 export default function Model({ 
   websiteState,
@@ -239,17 +239,17 @@ export default function Model({
         </group>
 
         <skinnedMesh name="left-eye" geometry={nodes['left-eye'].geometry} skeleton={nodes['left-eye'].skeleton}>
-          <meshStandardMaterial color='#FFFFFF' />
+          <meshStandardMaterial color='#FFFFFF' emissive='#FFFFFF' emissiveIntensity={ 0.5 } />
         </skinnedMesh>
         <skinnedMesh name="right-eye" geometry={nodes['right-eye'].geometry} skeleton={nodes['right-eye'].skeleton}>
-          <meshStandardMaterial color='#FFFFFF' />
+          <meshStandardMaterial color='#FFFFFF' emissive='#FFFFFF' emissiveIntensity={ 0.5 } />
         </skinnedMesh>
 
         <skinnedMesh name="eyebrows" geometry={nodes.eyebrows.geometry} skeleton={nodes.eyebrows.skeleton}>
           <meshStandardMaterial color='#FFFFFF' />
         </skinnedMesh>
 
-        <skinnedMesh name="Body" geometry={nodes.Body.geometry} material={materials['avatar-body']} skeleton={nodes.Body.skeleton} />
+        <skinnedMesh name="Body" geometry={nodes.Body.geometry} material={materials['avatar-body']} skeleton={nodes.Body.skeleton}/>
 
         <skinnedMesh name="hair-base" geometry={nodes['hair-base'].geometry} material={materials['avatar-body']} skeleton={nodes['hair-base'].skeleton}>
           <Html
