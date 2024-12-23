@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import * as THREE from 'three'
 import ContentCard from './components/content-cards/ContentCard.jsx'
 import Experience from './components/three/Experience.jsx'
 import LoadingScreen from './components/loading-screen/LoadingScreen.jsx'
 import Navigation from './components/navigation/Navigation.jsx'
+import { contentCardData } from './assets/data/contentCards.js'
 
 export default function App() {
     const [ isWebsiteLoading, setIsWebsiteLoading ] = useState( true )
@@ -27,6 +28,11 @@ export default function App() {
 
     const [ showNavigationMenu, setShowNavigationMenu ] = useState( false )
     const [ showContentCard, setShowContentCard ] = useState( false )
+    const [ currentContentCardLabel, setCurrentContentCardLabel ] = useState( null )
+
+    const contentCardInfo = useMemo( () => {
+        return contentCardData
+    }, [] )
 
     const handleScreenClick = () => {
         if ( userActionNeeded === 'click' ) {
@@ -34,14 +40,35 @@ export default function App() {
 
             if ( websiteState === 'intro-draw-card' ) {
                 setShowContentCard( false )
+            } else if ( websiteState === 'content-card' ) {
+                handleContentCardToNavigation()
             }
         }
     }
 
-    const handleNavigationToContentCard = () => {
+    const handleContentCardToNavigation = () => {
+        setShowContentCard( false )
+
+        setTimeout( () => {
+            setCameraState( ( prev ) => ({
+                ...prev,
+                position: new THREE.Vector3( 0, 0.7, 1.2 ),
+                fieldOfView: 30,
+                lookAt: new THREE.Vector3( 0, 1, 0 )
+            }))
+
+            setTimeout( () => {
+                setShowNavigationMenu( true )
+            }, 1000);
+        }, 500);
+    } 
+
+    const handleNavigationToContentCard = ( chosenIconLabel ) => {
+        setWebsiteState( 'content-card' )
+        setCurrentContentCardLabel( chosenIconLabel )
         setShowNavigationMenu( false )
 
-        setTimeout(() => {
+        setTimeout( () => {
             setCameraState( ( prev ) => ({
                 ...prev,
                 lookAt: new THREE.Vector3( 0, 2, 0 ),
@@ -50,6 +77,7 @@ export default function App() {
         
             setTimeout( () => {
                 setShowContentCard( true )
+                setUserActionNeeded( 'click' )
             }, 1000 )
         }, 500);
     }
@@ -59,6 +87,7 @@ export default function App() {
     }
 
     const handleIntroContentCard = () => {
+        setCurrentContentCardLabel( 'intro' )
         setTarotCardAnimationState( 'intro' )
 
         setTimeout(() => {
@@ -80,6 +109,7 @@ export default function App() {
 
     const handleLoadingScreenCleanup = () => {
         setIsWebsiteLoading( false )
+        setCurrentContentCardLabel( 'intro' )
 
         handleIntro()
     }
@@ -117,6 +147,9 @@ export default function App() {
             websiteState={ websiteState }
             setWebsiteState={ setWebsiteState }
             showContentCard={ showContentCard }
+            contentCardInfo={ contentCardInfo }
+            currentContentCardLabel={ currentContentCardLabel }
+            handleContentCardToNavigation={ handleContentCardToNavigation }
         />
         
         <div className='fixed top-0 left-0 w-full h-full z-30'>

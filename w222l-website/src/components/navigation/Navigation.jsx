@@ -20,7 +20,7 @@ export default function Navigation({ showNavigationMenu, toggleToContentCard }) 
         } else {
             const tl = gsap.timeline({
                 onComplete: () => {
-                    console.log( 'nav gone...' )
+                    
                 }
             })
 
@@ -29,7 +29,7 @@ export default function Navigation({ showNavigationMenu, toggleToContentCard }) 
                 duration: 0.25,
                 ease: "bounce.in"
             })
-        }
+        } 
     }, [ showNavigationMenu ] )
 
     return <div 

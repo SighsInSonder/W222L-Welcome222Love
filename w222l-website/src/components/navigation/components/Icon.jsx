@@ -50,8 +50,7 @@ export default function Icon({ label, x, y, icon, toggleToContentCard }) {
         style={{ transform: `translate( ${ x }, ${ y } )` }}
     >
         <div
-            className="text-foreground rounded-full flex items-center justify-center bg-background/40 border border-pink_two/30 border-solid backdrop-blur-[6px] shadow-glass-inset hover:shadow-glass-sm"
-            onClick={ handleIconClick }       
+            className="text-foreground rounded-full flex items-center justify-center bg-background/40 border border-pink_two/30 border-solid backdrop-blur-[6px] shadow-glass-inset hover:shadow-glass-sm"       
         >
 
             <span className='relative w-14 h-14 p-4 animate-spin-slow-reverse group-hover:pause hover:text-pink_three'>
